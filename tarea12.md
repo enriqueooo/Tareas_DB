@@ -12,7 +12,7 @@ SELECT c.full_name, c.address, (
 FROM client c;
 ```
 - captura
-<img src="Capturas/Captura de pantalla 2024-06-20 155955.png" alt="drawing" width="500"/>
+![image](https://github.com/enriqueooo/Tareas_DB/assets/148830588/4b3b92ba-b49f-44ad-bb35-c9dac2d88e07)
 
 2.- Listar nombre y correo de los clientes junto a su compra mas cara realizada.
 - sentencia
