@@ -24,56 +24,81 @@ EXECUTE PROCEDURE validar_cedula_func();
 ```
 - captura
 <img src="Capturas/6.png" alt="drawing" width="500"/>
+2.-Crear un función y un trigger para que cada vez que se inserte un nuevo registro en la tabla item se disminuya el stock de la tabla product.
+
+```
+CREATE OR REPLACE FUNCTION disminuir_stock_func()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE producto
+    SET stock = stock - NEW.cantidad
+    WHERE id = NEW.product_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Producto no encontrado.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+```
+CREATE TRIGGER trg_disminuir_stock
+AFTER INSERT ON item
+FOR EACH ROW
+EXECUTE PROCEDURE disminuir_stock_func();
+
+```
+- captura
 <img src="Capturas/7.png" alt="drawing" width="500"/>
+<img src="Capturas/8.png" alt="drawing" width="500"/>
 
-2.- Listar nombre y correo de los clientes junto a su compra mas cara realizada.
-- sentencia
+
+3.-Crear un función y un trigger para la tabla invoice donde valide que el campo create_at sea del año actual (fecha sistema).
+
 ```
-SELECT C.full_name, c.email, (
-                              SELECT MAX (i.total) AS compra_cara 
-                              FROM invoice i WHERE i.client_id = c.id
-                              )
-FROM client c;
+CREATE OR REPLACE FUNCTION validar_fecha_actual_func()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXTRACT(YEAR FROM NEW.create_at) <> EXTRACT(YEAR FROM CURRENT_DATE) THEN
+        RAISE EXCEPTION 'La fecha de creación debe ser del año actual.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+```
+CREATE TRIGGER trg_validar_fecha_actual
+BEFORE INSERT OR UPDATE ON invoic
+FOR EACH ROW
+EXECUTE PROCEDURE validar_fecha_actual_func();
+
 ```
 - captura
-<img src="Capturas/2.png" alt="drawing" width="500"/>
+<img src="Capturas/Captura 9.png" alt="drawing" width="500"/>
+<img src="Capturas/Captura 10.png" alt="drawing" width="500"/>
 
-3.- Listar las facturas donde sus totales sean mayores al promedio de las facturas.
-- sentencia
+    
+4.-Crear un función y un trigger para la tabla client y validar que el correo tenga un @.
+
 ```
-SELECT i.create_at, i.total 
-FROM invoice i 
-WHERE (SELECT AVG(i.total) FROM invoice i ) < i.total;
+CREATE OR REPLACE FUNCTION validar_correo_func()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF POSITION('@' IN NEW.correo) = 0 THEN
+        RAISE EXCEPTION 'El correo debe contener un @.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+```
+CREATE TRIGGER trg_validar_correo
+BEFORE INSERT OR UPDATE ON clientes
+FOR EACH ROW
+EXECUTE PROCEDURE validar_correo_func();
+
 ```
 - captura
-<img src="Capturas/Captura 3.png" alt="drawing" width="500"/>
-
----
-
-## DB EVENT     
-1.- Listar una lista de conferencias, incluyendo el número total de asistentes registrados en cada conferencia.
-- sentencia
-```
-SELECT m.id, m.full_name, m.email, m.age 
-FROM member m WHERE m.id IN (
-                              SELECT r.member_id FROM register r JOIN conference c ON r.conference_id = c.id 
-                              WHERE c.total_attendees > 50
-                            );
-```
-- captura
-<img src="Capturas/Captura 4.png" alt="drawing" width="500"/>
-
-2.- Seleccionar el id, full_name, email y age de los miembros que se han registrado en eventos con más de 100 participantes totales.
-- sentencia
-```
-SELECT m.id, m.full_name, m.email, m.age 
-FROM member m 
-WHERE m.id IN (
-    SELECT r.member_id 
-    FROM register r 
-    JOIN event e ON r.conference_id = e.id 
-    WHERE e.total_attendees > 100
-);
-```
-- captura
-<img src="Capturas/Captura 5.png" alt="drawing" width="500"/>
+<img src="Capturas/Captura 11.png" alt="drawing" width="500"/>
+<img src="Capturas/Captura 12.png" alt="drawing" width="500"/>
