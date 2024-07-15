@@ -23,7 +23,7 @@ EXECUTE PROCEDURE validar_cedula_func();
 
 ```
 - captura
-<img src="Capturas/6.png" alt="drawing" width="500"/>
+<img src="capturas/6.png" alt="drawing" width="500"/>
 2.-Crear un función y un trigger para que cada vez que se inserte un nuevo registro en la tabla item se disminuya el stock de la tabla product.
 
 ```
@@ -50,8 +50,8 @@ EXECUTE PROCEDURE disminuir_stock_func();
 
 ```
 - captura
-<img src="Capturas/7.png" alt="drawing" width="500"/>
-<img src="Capturas/8.png" alt="drawing" width="500"/>
+<img src="capturas/7.png" alt="drawing" width="500"/>
+<img src="capturas/8.png" alt="drawing" width="500"/>
 
 
 3.-Crear un función y un trigger para la tabla invoice donde valide que el campo create_at sea del año actual (fecha sistema).
@@ -75,8 +75,8 @@ EXECUTE PROCEDURE validar_fecha_actual_func();
 
 ```
 - captura
-<img src="Capturas/Captura 9.png" alt="drawing" width="500"/>
-<img src="Capturas/Captura 10.png" alt="drawing" width="500"/>
+<img src="capturas/9.png" alt="drawing" width="500"/>
+<img src="capturas/10.png" alt="drawing" width="500"/>
 
     
 4.-Crear un función y un trigger para la tabla client y validar que el correo tenga un @.
@@ -100,5 +100,5 @@ EXECUTE PROCEDURE validar_correo_func();
 
 ```
 - captura
-<img src="Capturas/Captura 11.png" alt="drawing" width="500"/>
-<img src="Capturas/Captura 12.png" alt="drawing" width="500"/>
+<img src="capturas/11.png" alt="drawing" width="500"/>
+<img src="capturas/12.png" alt="drawing" width="500"/>
